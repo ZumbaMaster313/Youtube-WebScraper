@@ -28,9 +28,12 @@ def slavUnion(id):
 
     vids = soup.findAll('a',attrs={'class':'yt-uix-tile-link'})
     videolist=[]
+    count =  0
     for v in vids:
-        tmp = 'https://www.youtube.com' + v['href']
-        videolist.append(tmp)
+        if (count <= 15):
+            tmp = 'https://www.youtube.com' + v['href']
+            videolist.append(tmp)
+        count += 1
 
     for i in videolist:
         if ("radio" in i ) or ("channel" in i):
