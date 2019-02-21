@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Slav Player</title>
+        <title>Search Anything</title>
         <meta name="viewport" content="height=device-height, initial-scale=1.0">
         <link href="{{ url_for('static', filename='stylesheets/style.css') }}" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -10,27 +10,41 @@
             let list;
 
             $(document).ready(function(){
+                $(".stringPosition ").hide();
                 $('.submit').click(function(){
-                    let v = $('.password').val()
+                    let v = $('.password').val();
+
                     if (v.length > 0) {
                         $(".box").hide();
                         $.ajax({
                             url: '/search/' + v + '',
                             data: $('.password').text(),
                             type: 'POST',
+
                             beforeSend : function(){
                                 $('.middle').append('<div class="loader"></div>'); 
                             },
                             success: function(response) {
-                                let r = JSON.stringify(response)
-                                r = r.replace("[","").replace("]","")
-                                list = r.split(",")
-                                $(".middle").append("<iframe id='player' src=" + list[0].replace("watch?v=", "embed/") + " class=\"player\" width=\"560\" height=\"315\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>");
+                                let r = JSON.stringify(response);
+                                r = r.replace("[","").replace("]","");
+                                list = r.split(",");
+                                
+                                $(".stringPosition ").fadeIn();
+                                
+                                var i;
+                                for (i = 0; i < list.length; i++)
+                                {
+                                    $(".boxSearch").append("<iframe id='player' src=" + list[i].replace("watch?v=", "embed/") + " class=\"player\" width=\"560\" height=\"315\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>");
+                                    $(".boxSearch").append('<div class="devider"></div>');
+                                }
+                                $(".boxSearch").css({"margin-top": "4200px"});
                                 $(".loader").hide();
                             },
+
                             complete : function() {
                                 
                             },
+
                             error: function(error) {
                             console.log(error);
                             }
@@ -39,7 +53,7 @@
                     }
                     else {
                         //$('.box').show();
-                        alert('You are bad')
+                        alert('You are bad');
                     }
                 });
             });
@@ -65,6 +79,10 @@
                             <input class="submit" type="button" value="Search">
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="stringPosition">
+                <div class="boxSearch">
                 </div>
             </div>
             <!--</form>-->
