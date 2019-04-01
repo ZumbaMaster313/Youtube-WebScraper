@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Search Anything</title>
+        <meta name="viewport" content="height=device-height, initial-scale=1.0">
+        <link href="{{ url_for('static', filename='stylesheets/style.css') }}" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            let list;
+
+            $(document).ready(function(){
+                $(".stringPosition ").hide();
+                $('.submit').click(function(){
+                    let v = $('.password').val();
+
+                    if (v.length > 0) {
+                        $(".box").hide();
+                        $.ajax({
+                            url: '/search/' + v + '',
+                            data: $('.password').text(),
+                            type: 'POST',
+
+                            beforeSend : function(){
+                                $('.middle').append('<div class="loader"></div>'); 
+                            },
+                            success: function(response) {
+                                let r = JSON.stringify(response);
+                                r = r.replace("[","").replace("]","");
+                                list = r.split(",");
+                                
+                                $(".stringPosition ").fadeIn();
+                                
+                                var i;
+                                for (i = 0; i < list.length; i++)
+                                {
+                                    $(".boxSearch").append("<iframe id='player' src=" + list[i].replace("watch?v=", "embed/") + " class=\"player\" width=\"560\" height=\"315\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>");
+                                    $(".boxSearch").append('<div class="devider"></div>');
+                                }
+                                $(".boxSearch").css({"margin-top": "4200px"});
+                                $(".loader").hide();
+                            },
+
+                            complete : function() {
+                                
+                            },
+
+                            error: function(error) {
+                            console.log(error);
+                            }
+                        });
+                        //$('.box').hide();
+                    }
+                    else {
+                        //$('.box').show();
+                        alert('You are bad');
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="title">
+                <p class="header">THE ULTIMATE WEB SCRAPER</p>
+                <p class="hint">ThEbEstSearCHEngine</p>
+            </div>
+            <!--<form form action="/search" method="post">-->
+            <div class="middle">
+                <div class="box">
+                    <div class="hinta">
+                        <div class="titleplace">
+                            <p class="heading">Enter Keyword</p>
+                        </div>
+                        <div class="passwordplace">
+                            <input class="password" placeholder = "Secret Password" name="password">
+                        </div>
+                        <div class="buttonplace">
+                            <input class="submit" type="button" value="Search">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="stringPosition">
+                <div class="boxSearch">
+                </div>
+            </div>
+            <!--</form>-->
+        </div>
+    </body>
+</html>
