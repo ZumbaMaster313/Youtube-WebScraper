@@ -7,18 +7,29 @@
         <link href="{{ url_for('static', filename='stylesheets/style.css') }}" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript">
-            let list;
 
+            let list;
             $(document).ready(function(){
-                $(".stringPosition ").hide();
-                $('.submit').click(function(){
-                    let v = $('.password').val();
+                $(".boxSearch").hide();
+                $(".center").hide();
+                jQuery(':input').click(function(event){
+                    if(this.id =='button'){
+                        var value = $('.password');
+                    } else if(this.id =='submit'){
+                        r = [];
+                        list = [];
+                        $(".boxSearch").hide();
+                        value = $('.search');
+                        var myNode = document.getElementById("delete");
+                        myNode.innerHTML = '';
+                    }
+                    let v = value.val();
 
                     if (v.length > 0) {
                         $(".box").hide();
                         $.ajax({
                             url: '/search/' + v + '',
-                            data: $('.password').text(),
+                            data: value.text(),
                             type: 'POST',
 
                             beforeSend : function(){
@@ -29,15 +40,18 @@
                                 r = r.replace("[","").replace("]","");
                                 list = r.split(",");
                                 
-                                $(".stringPosition ").fadeIn();
+                                $(".boxSearch").fadeIn();
+                                $(".center").fadeIn();
                                 
                                 var i;
                                 for (i = 0; i < list.length; i++)
                                 {
-                                    $(".boxSearch").append("<iframe id='player' src=" + list[i].replace("watch?v=", "embed/") + " class=\"player\" width=\"560\" height=\"315\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>");
+                                    $(".boxSearch").append('<iframe id="player" src=' + list[i].replace("watch?v=", "embed/") + ' class=\"player\" width=\"560\" height=\"315\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>');
                                     $(".boxSearch").append('<div class="devider"></div>');
                                 }
-                                $(".boxSearch").css({"margin-top": "4200px"});
+                                $(".player").css({"margin-top": "40px", "margin-left": "72.5px"});
+                                $(".devider").css({"margin-top": "18px"});
+                                $(".boxSearch").css({"margin-top": "260px"});
                                 $(".loader").hide();
                             },
 
@@ -49,10 +63,8 @@
                             console.log(error);
                             }
                         });
-                        //$('.box').hide();
                     }
                     else {
-                        //$('.box').show();
                         alert('You are bad');
                     }
                 });
@@ -63,9 +75,8 @@
         <div class="wrapper">
             <div class="title">
                 <p class="header">THE ULTIMATE WEB SCRAPER</p>
-                <p class="hint">ThEbEstSearCHEngine</p>
+                <p class="hint">*ThEbEstSearCHEngine*</p>
             </div>
-            <!--<form form action="/search" method="post">-->
             <div class="middle">
                 <div class="box">
                     <div class="hinta">
@@ -73,17 +84,25 @@
                             <p class="heading">Enter Keyword</p>
                         </div>
                         <div class="passwordplace">
-                            <input class="password" placeholder = "Secret Password" name="password">
+                            <input class="password" placeholder = "Secret Password" name="password" autocomplete="off">
                         </div>
                         <div class="buttonplace">
-                            <input class="submit" type="button" value="Search">
+                            <input id="button" class="submit" type="button" value="Search" autocomplete="off">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="stringPosition">
-                <div class="boxSearch">
+            <div class="center">
+                <div class="boxInput">
+                    <div class="input">
+                        <input class="search" placeholder = "Search" name="password" autocomplete="off">
+                    </div>
+                    <div class="submitLocation">
+                        <input id="submit" class="launch" type="button" value="Submit" autocomplete="off">
+                    </div>
                 </div>
+            </div>
+            <div class="boxSearch" id ="delete">
             </div>
             <!--</form>-->
         </div>
